@@ -44,8 +44,7 @@ public class BotCommandsTests {
         linkRepository = Mockito.mock(LinkRepository.class);
         var messageProcessor = new DefaultCommandProcessor(linkRepository);
         var replyProcessor = new DefaultReplyProcessor(linkRepository);
-        linkTrackerBot = new LinkTrackerBot("testToken", replyProcessor, messageProcessor);
-        ReflectionTestUtils.setField(linkTrackerBot, "bot", bot);
+        linkTrackerBot = new LinkTrackerBot(bot, replyProcessor, messageProcessor);
     }
 
     private void setUpdateMessage(String text) {

@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 @Component("DefaultReplyProcessor")
 public class DefaultReplyProcessor implements ReplyProcessor {
-    private final List<? extends Reply> replies;
+    private final List<Reply> replies;
 
     @Autowired
     public DefaultReplyProcessor(LinkRepository linkRepository) {
@@ -24,7 +24,7 @@ public class DefaultReplyProcessor implements ReplyProcessor {
     }
 
     @Override
-    public List<? extends Reply> replies() {
+    public List<Reply> replies() {
         return replies;
     }
 

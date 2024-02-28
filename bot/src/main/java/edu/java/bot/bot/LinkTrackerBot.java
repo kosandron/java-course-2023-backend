@@ -22,13 +22,12 @@ public class LinkTrackerBot implements Bot {
     private final ReplyProcessor replyProcessor;
     private final CommandProcessor commandProcessor;
 
-    @Autowired
     public LinkTrackerBot(
-        @Value("${app.telegram-token}") String botToken,
+        TelegramBot telegramBot,
         @Qualifier("DefaultReplyProcessor") ReplyProcessor replyProcessor,
         @Qualifier("DefaultCommandProcessor") CommandProcessor commandProcessor
     ) {
-        this.bot = new TelegramBot(botToken);
+        this.bot = telegramBot;
         this.replyProcessor = replyProcessor;
         this.commandProcessor = commandProcessor;
     }
@@ -59,6 +58,7 @@ public class LinkTrackerBot implements Bot {
     @Override
     public void close() {
         bot.removeGetUpdatesListener();
+        bot.shutdown();
     }
 
     private void setupMenu() {

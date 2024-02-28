@@ -6,7 +6,7 @@ import edu.java.bot.replies.Reply;
 import java.util.List;
 
 public interface ReplyProcessor {
-    List<? extends Reply> replies();
+    List<Reply> replies();
 
     SendMessage process(Update update);
 }
