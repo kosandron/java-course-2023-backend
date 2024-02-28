@@ -13,7 +13,7 @@ public class StackOverflowWebClient implements StackOverflowClient {
     }
 
     public StackOverflowWebClient(String url) {
-        this.webClient = WebClient.builder().baseUrl(url).build();
+        this.webClient = WebClient.create(url);
     }
 
     @Override

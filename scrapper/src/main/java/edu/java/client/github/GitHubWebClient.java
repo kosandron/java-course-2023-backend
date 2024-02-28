@@ -13,7 +13,7 @@ public class GitHubWebClient implements GitHubClient {
     }
 
     public GitHubWebClient(String url) {
-        this.webClient = WebClient.builder().baseUrl(url).build();
+        this.webClient = WebClient.create(url);
     }
 
     @Override
