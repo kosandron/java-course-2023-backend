@@ -19,7 +19,7 @@ public class ScrapperLinksHttpClient {
     }
 
     public ScrapperLinksHttpClient(String baseUrl) {
-        this.webClient = WebClient.builder().baseUrl(baseUrl).build();
+        this.webClient = WebClient.create(baseUrl);
     }
 
     public ListLinksResponse getLinks(Long tgChatId) {

@@ -13,7 +13,7 @@ public class ScrapperTgChatHttpClient {
     }
 
     public ScrapperTgChatHttpClient(String baseUrl) {
-        this.webClient = WebClient.builder().baseUrl(baseUrl).build();
+        this.webClient = WebClient.create(baseUrl);
     }
 
     public TgChatResponse addTgChat(Long tgChatId) {
