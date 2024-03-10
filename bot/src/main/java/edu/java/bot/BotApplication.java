@@ -9,10 +9,14 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 @SpringBootApplication
 @EnableConfigurationProperties(ApplicationConfig.class)
 public class BotApplication {
+    public BotApplication(LinkTrackerBot bot) {
+        bot.start();
+    }
+
     public static void main(String[] args) {
         var context = SpringApplication.run(BotApplication.class, args);
 
-        var bot = context.getBean(LinkTrackerBot.class);
-        bot.start();
+        //var bot = context.getBean(LinkTrackerBot.class);
+        //bot.start();
     }
 }

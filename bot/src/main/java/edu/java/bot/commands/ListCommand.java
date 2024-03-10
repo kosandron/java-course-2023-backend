@@ -5,19 +5,25 @@ import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.repositories.LinkRepository;
 import java.util.List;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Component;
 
+@Component
 @AllArgsConstructor
 public class ListCommand implements Command {
+    private static final String COMMAND = "/list";
+    private static final String DESCRIPTION = "list of tracked site";
+    private static final String EMPTY_LIST_REPLY = "You are tracking nothing";
+    private static final String FILLED_LIST_REPLY = "List of tracked sites:";
     private final LinkRepository linkRepository;
 
     @Override
     public String command() {
-        return CommandConstants.LIST_COMMAND;
+        return COMMAND;
     }
 
     @Override
     public String description() {
-        return CommandConstants.LIST_DESCRIPTION;
+        return DESCRIPTION;
     }
 
     @Override
@@ -26,8 +32,8 @@ public class ListCommand implements Command {
 
         var strBuilder = new StringBuilder(
             links.isEmpty()
-                ? CommandConstants.EMPTY_LIST_REPLY
-                : CommandConstants.FILLED_LIST_REPLY
+                ? EMPTY_LIST_REPLY
+                : FILLED_LIST_REPLY
         );
 
         for (var link : links) {

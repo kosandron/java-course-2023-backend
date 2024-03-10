@@ -2,7 +2,6 @@ package edu.java.bot.replies.processors;
 
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
-import edu.java.bot.commands.CommandConstants;
 import edu.java.bot.replies.Reply;
 import edu.java.bot.replies.TrackReply;
 import edu.java.bot.replies.UntrackReply;
@@ -13,14 +12,11 @@ import org.springframework.stereotype.Component;
 
 @Component("DefaultReplyProcessor")
 public class DefaultReplyProcessor implements ReplyProcessor {
+    private static final String UNSUPPORTED_COMMAND = "Unsopported command!";
     private final List<Reply> replies;
 
-    @Autowired
-    public DefaultReplyProcessor(LinkRepository linkRepository) {
-        replies = List.of(
-            new TrackReply(linkRepository),
-            new UntrackReply(linkRepository)
-        );
+    public DefaultReplyProcessor(List<Reply> replies) {
+        this.replies = replies;
     }
 
     @Override
@@ -36,6 +32,6 @@ public class DefaultReplyProcessor implements ReplyProcessor {
             }
         }
 
-        return new SendMessage(update.message().chat().id(), CommandConstants.UNSUPPORTED_COMMAND);
+        return new SendMessage(update.message().chat().id(), UNSUPPORTED_COMMAND);
     }
 }

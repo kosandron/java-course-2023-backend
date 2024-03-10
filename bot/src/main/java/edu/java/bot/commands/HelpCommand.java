@@ -2,8 +2,13 @@ package edu.java.bot.commands;
 
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
+import org.springframework.stereotype.Component;
 
+@Component
 public class HelpCommand implements Command {
+    private static final String COMMAND = "/help";
+    private static final String DESCRIPTION = "output of all commands description";
+
     private final String helpText;
 
     public HelpCommand(Command... commands) {
@@ -14,17 +19,20 @@ public class HelpCommand implements Command {
             strBuilder.append(command.description());
             strBuilder.append('\n');
         }
+        strBuilder.append(COMMAND);
+        strBuilder.append(" - ");
+        strBuilder.append(DESCRIPTION);
         helpText = strBuilder.toString();
     }
 
     @Override
     public String command() {
-        return CommandConstants.HELP_COMMAND;
+        return COMMAND;
     }
 
     @Override
     public String description() {
-        return CommandConstants.HELP_DESCRIPTION;
+        return DESCRIPTION;
     }
 
     @Override

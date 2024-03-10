@@ -11,9 +11,4 @@ public class BotConfig {
     TelegramBot telegramBot(ApplicationConfig appConfig) {
         return new TelegramBot(appConfig.telegramToken());
     }
-
-    @Bean
-    LinkTrackerBot linkTrackerBot() {
-        return new LinkTrackerBot(telegramBot, replyProcessor, commandProcessor);
-    }
 }
