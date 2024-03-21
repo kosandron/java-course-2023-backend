@@ -1,7 +1,8 @@
 package edu.java.scrapper.clientTests;
 
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
-import edu.java.client.dto.StackOverFlowResponse;
+import edu.java.client.dto.StackOverflowItem;
+import edu.java.client.dto.StackOverflowResponse;
 import edu.java.client.stackoverflow.StackOverflowClient;
 import edu.java.client.stackoverflow.StackOverflowWebClient;
 import java.time.OffsetDateTime;
@@ -33,8 +34,12 @@ public class StackOverflowWebClientTest {
                 .withBody(
                     """
                         {
+                        "items": [
+                        {
                             "title": "%s",
                             "last_activity_date": %d
+                         }
+                            ]
                         }
                         """.formatted(QUESTION_TITLE, LAST_MODIFIED_TIME.toEpochSecond()))
             ));
@@ -53,11 +58,11 @@ public class StackOverflowWebClientTest {
         makeStubSuccess();
 
         // Act
-        StackOverFlowResponse response = client.fetchQuestion(QUESTION_ID);
+        StackOverflowResponse response = client.fetchQuestion(QUESTION_ID);
 
         // Assert
-        assertThat(response.title()).isEqualTo(QUESTION_TITLE);
-        assertThat(response.lastModified()).isEqualTo(LAST_MODIFIED_TIME);
+        assertThat(response.items()[0].title()).isEqualTo(QUESTION_TITLE);
+        assertThat(response.items()[0].lastModified()).isEqualTo(LAST_MODIFIED_TIME);
     }
 
     @Test
