@@ -24,6 +24,10 @@ public class BotExceptionHandler {
         return createApiErrorResponse(exception, request, HttpStatus.BAD_REQUEST);
     }
 
+    private static String[] getStacktrace(Exception exception) {
+        return Arrays.stream(exception.getStackTrace()).map(Objects::toString).toArray(String[]::new);
+    }
+
     private static ApiErrorResponse createApiErrorResponse(Exception exception, WebRequest request,
         HttpStatus requestStatus) {
         return new ApiErrorResponse(
@@ -31,6 +35,6 @@ public class BotExceptionHandler {
             requestStatus.toString(),
             exception.getClass().getName(),
             exception.getMessage(),
-            Arrays.stream(exception.getStackTrace()).map(Objects::toString).toArray(String[]::new));
+            getStacktrace(exception));
     }
 }

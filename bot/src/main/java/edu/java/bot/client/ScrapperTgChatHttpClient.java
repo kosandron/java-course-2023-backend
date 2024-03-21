@@ -4,8 +4,8 @@ import edu.java.bot.client.dto.TgChatResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 
 public class ScrapperTgChatHttpClient {
-    private static final String BASE_URL = "http:///localhost:8080";
-    private static final String TG_CHAT_BY_ID_LINK = "/tg-chat/{id}";
+    private static final String BASE_URL = "http://localhost:8080";
+    public static final String TG_CHAT_BY_ID_LINK = "/tg-chat/{id}";
     private final WebClient webClient;
 
     public ScrapperTgChatHttpClient() {

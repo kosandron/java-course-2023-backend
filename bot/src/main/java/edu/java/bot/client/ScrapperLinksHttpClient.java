@@ -6,11 +6,10 @@ import edu.java.bot.client.dto.ListLinksResponse;
 import edu.java.bot.client.dto.RemoveLinkRequest;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
 public class ScrapperLinksHttpClient {
-    private static final String BASE_URL = "http:///localhost:8080";
-    private static final String LINKS_PATH = "/links";
+    private static final String BASE_URL = "http://localhost:8080";
+    public static final String LINKS_PATH = "/links";
     private static final String TG_CHAT_HEADER = "Tg-Chat-Id";
     private final WebClient webClient;
 
@@ -37,7 +36,7 @@ public class ScrapperLinksHttpClient {
             .post()
             .uri(LINKS_PATH)
             .header(TG_CHAT_HEADER, tgChatId.toString())
-            .body(Mono.just(new AddLinkRequest(link)), AddLinkRequest.class)
+            .bodyValue(new AddLinkRequest((link)))
             .retrieve()
             .bodyToMono(LinkResponse.class)
             .block();
@@ -48,7 +47,7 @@ public class ScrapperLinksHttpClient {
             .method(HttpMethod.DELETE)
             .uri(LINKS_PATH)
             .header(TG_CHAT_HEADER, tgChatId.toString())
-            .body(Mono.just(new RemoveLinkRequest(link)), RemoveLinkRequest.class)
+            .bodyValue(new RemoveLinkRequest(link))
             .retrieve()
             .bodyToMono(LinkResponse.class)
             .block();

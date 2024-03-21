@@ -37,12 +37,16 @@ public class ScrapperExceptionHandler {
         return createApiErrorResponse(exception, request, HttpStatus.BAD_REQUEST);
     }
 
+    private static String[] getStacktrace(Exception exception) {
+        return Arrays.stream(exception.getStackTrace()).map(Objects::toString).toArray(String[]::new);
+    }
+
     private static ApiErrorResponse createApiErrorResponse(Exception exception, WebRequest request, HttpStatus status) {
         return new ApiErrorResponse(
             request.getDescription(false),
             status.toString(),
             exception.getClass().getName(),
             exception.getMessage(),
-            Arrays.stream(exception.getStackTrace()).map(Objects::toString).toArray(String[]::new));
+            getStacktrace(exception));
     }
 }
