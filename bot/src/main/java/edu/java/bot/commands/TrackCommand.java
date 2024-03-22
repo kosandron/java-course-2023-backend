@@ -10,6 +10,7 @@ public class TrackCommand implements Command {
     private static final String COMMAND = "/track";
     private static final String DESCRIPTION = "start track site";
     private static final String REPLY = "What site do you want to track?";
+
     @Override
     public String command() {
         return COMMAND;

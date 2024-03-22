@@ -21,6 +21,9 @@ public class DefaultLinkRepository implements LinkRepository {
             linkListByTelegramId.put(telegramId, new ArrayList<>());
         }
         var list = linkListByTelegramId.get(telegramId);
+        if (list.contains(link)) {
+            return true;
+        }
         return list.add(link);
     }
 

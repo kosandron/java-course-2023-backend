@@ -3,11 +3,7 @@ package edu.java.bot.replies.processors;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.replies.Reply;
-import edu.java.bot.replies.TrackReply;
-import edu.java.bot.replies.UntrackReply;
-import edu.java.bot.repositories.LinkRepository;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component("DefaultReplyProcessor")

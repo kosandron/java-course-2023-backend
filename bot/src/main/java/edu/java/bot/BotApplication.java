@@ -15,8 +15,5 @@ public class BotApplication {
 
     public static void main(String[] args) {
         var context = SpringApplication.run(BotApplication.class, args);
-
-        //var bot = context.getBean(LinkTrackerBot.class);
-        //bot.start();
     }
 }

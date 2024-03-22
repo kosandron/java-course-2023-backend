@@ -11,9 +11,7 @@ import edu.java.bot.commands.Command;
 import edu.java.bot.commands.processors.CommandProcessor;
 import edu.java.bot.replies.processors.ReplyProcessor;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service

@@ -10,6 +10,7 @@ public class UntrackCommand implements Command {
     private static final String COMMAND = "/untrack";
     private static final String DESCRIPTION = "delete site from track list";
     private static final String REPLY = "What site do you want to end track?";
+
     @Override
     public String command() {
         return COMMAND;

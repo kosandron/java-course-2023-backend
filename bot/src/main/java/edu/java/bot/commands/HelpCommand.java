@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 public class HelpCommand implements Command {
     private static final String COMMAND = "/help";
     private static final String DESCRIPTION = "output of all commands description";
+    private static final String SEPARATOR = " - ";
 
     private final String helpText;
 
@@ -15,12 +16,12 @@ public class HelpCommand implements Command {
         var strBuilder = new StringBuilder();
         for (var command : commands) {
             strBuilder.append(command.command());
-            strBuilder.append(" - ");
+            strBuilder.append(SEPARATOR);
             strBuilder.append(command.description());
             strBuilder.append('\n');
         }
         strBuilder.append(COMMAND);
-        strBuilder.append(" - ");
+        strBuilder.append(SEPARATOR);
         strBuilder.append(DESCRIPTION);
         helpText = strBuilder.toString();
     }

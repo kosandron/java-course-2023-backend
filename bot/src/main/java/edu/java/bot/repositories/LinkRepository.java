@@ -1,7 +1,6 @@
 package edu.java.bot.repositories;
 
 import java.util.List;
-import org.apache.commons.validator.routines.UrlValidator;
 
 public interface LinkRepository {
 
