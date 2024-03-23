@@ -4,16 +4,14 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.replies.Reply;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component("DefaultReplyProcessor")
+@RequiredArgsConstructor
 public class DefaultReplyProcessor implements ReplyProcessor {
     private static final String UNSUPPORTED_COMMAND = "Unsopported command!";
     private final List<Reply> replies;
-
-    public DefaultReplyProcessor(List<Reply> replies) {
-        this.replies = replies;
-    }
 
     @Override
     public List<Reply> replies() {

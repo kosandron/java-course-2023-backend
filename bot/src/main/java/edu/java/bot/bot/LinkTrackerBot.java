@@ -28,6 +28,8 @@ public class LinkTrackerBot implements Bot {
         this.bot = telegramBot;
         this.replyProcessor = replyProcessor;
         this.commandProcessor = commandProcessor;
+
+        start();
     }
 
     @Override
