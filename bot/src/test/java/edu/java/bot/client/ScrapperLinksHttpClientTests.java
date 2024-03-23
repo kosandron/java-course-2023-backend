@@ -3,6 +3,9 @@ package edu.java.bot.client;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import edu.java.bot.client.dto.LinkResponse;
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
@@ -23,32 +26,33 @@ public class ScrapperLinksHttpClientTests {
 
     private final ScrapperLinksHttpClient client = new ScrapperLinksHttpClient("http://localhost:1234");
 
-    public void makeStubSuccess() {
+    @Test
+    public void successGetLinksRequestTest() {
+        // Arrange
         stubFor(
             get(urlEqualTo(ScrapperLinksHttpClient.LINKS_PATH))
                 .withHeader("Tg-Chat-Id", equalTo("1"))
                 .willReturn(aResponse()
                     .withHeader("Content-Type", "application/json")
                     .withStatus(200)
-                    .withBody(
-                        """
-                            {
-                              "links": [
-                                {
-                                  "id": 1,
-                                  "url": "%s"
-                                },
-                                {
-                                  "id": 2,
-                                  "url": "%s"
-                                }
-                              ],
-                              "size": 2
-                            }
-                            """.formatted(URL1, URL2)
+                    .withBody(jsonToStr("src/test/resources/scrapper/links.json").formatted(URL1, URL2)
                     )
                 )
         );
+
+        // Act
+        var response = client.getLinks(1L);
+
+        // Assert
+        assertThat(response.links())
+            .contains(new LinkResponse(1L, URI.create(URL1)))
+            .contains(new LinkResponse(2L, URI.create(URL2)));
+        assertThat(response.size()).isEqualTo(2);
+    }
+
+    @Test
+    public void successAddLinkRequestTest() {
+        // Arrange
         stubFor(
             post(urlEqualTo(ScrapperLinksHttpClient.LINKS_PATH))
                 .withHeader("Tg-Chat-Id", equalTo("1"))
@@ -73,6 +77,18 @@ public class ScrapperLinksHttpClientTests {
                     )
                 )
         );
+
+        // Act
+        var response = client.addLink(1L, URL1);
+
+        // Assert
+        assertThat(response.id()).isEqualTo(1L);
+        assertThat(response.url()).isEqualTo(URI.create(URL1));
+    }
+
+    @Test
+    public void successDeleteLinkRequestTest() {
+        // Arrange
         stubFor(
             delete(urlEqualTo(ScrapperLinksHttpClient.LINKS_PATH))
                 .withHeader("Tg-Chat-Id", equalTo("1"))
@@ -96,9 +112,19 @@ public class ScrapperLinksHttpClientTests {
                         """.formatted(URL1)
                     ))
         );
+
+        // Act
+        var response = client.deleteLink(1L, URL1);
+
+        // Assert
+        assertThat(response.id()).isEqualTo(1L);
+        assertThat(response.url()).isEqualTo(URI.create(URL1));
     }
 
-    public void makeStubServerError() {
+
+    @Test
+    public void badGetRequestTest() {
+        // Arrange
         stubFor(
             get(urlEqualTo(ScrapperLinksHttpClient.LINKS_PATH))
                 .willReturn(aResponse()
@@ -117,58 +143,15 @@ public class ScrapperLinksHttpClientTests {
                     .withStatus(404)
                 )
         );
-    }
-
-    @Test
-    public void successGetLinksRequestTest() {
-        // Arrange
-        makeStubSuccess();
-
-        // Act
-        var response = client.getLinks(1L);
-
-        // Assert
-        assertThat(response.links())
-            .contains(new LinkResponse(1L, URI.create(URL1)))
-            .contains(new LinkResponse(2L, URI.create(URL2)));
-        assertThat(response.size()).isEqualTo(2);
-    }
-
-    @Test
-    public void successAddLinkRequestTest() {
-        // Arrange
-        makeStubSuccess();
-
-        // Act
-        var response = client.addLink(1L, URL1);
-
-        // Assert
-        assertThat(response.id()).isEqualTo(1L);
-        assertThat(response.url()).isEqualTo(URI.create(URL1));
-    }
-
-    @Test
-    public void successDeleteLinkRequestTest() {
-        // Arrange
-        makeStubSuccess();
-
-        // Act
-        var response = client.deleteLink(1L, URL1);
-
-        // Assert
-        assertThat(response.id()).isEqualTo(1L);
-        assertThat(response.url()).isEqualTo(URI.create(URL1));
-    }
-
-
-    @Test
-    public void badGetRequestTest() {
-        // Arrange
-        makeStubServerError();
 
         // Act, Assert
         assertThrows(WebClientResponseException.class, () -> client.getLinks(1L));
         assertThrows(WebClientResponseException.class, () -> client.addLink(1L, URL1));
         assertThrows(WebClientResponseException.class, () -> client.deleteLink(1L, URL1));
+    }
+
+    @SneakyThrows
+    public String jsonToStr(String filepath) {
+        return Files.readString(Paths.get(filepath));
     }
 }

@@ -16,46 +16,25 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class ScrapperTgChatHttpClientTests {
     private final ScrapperTgChatHttpClient client = new ScrapperTgChatHttpClient("http://localhost:1234");
 
-    public void setupStubSuccess() {
-        stubFor(
-            post(urlPathTemplate(ScrapperTgChatHttpClient.TG_CHAT_BY_ID_LINK))
-                .withPathParam("id", equalTo("1"))
-                .willReturn(aResponse()
-                    .withHeader("Content-Type", "application/json")
-                    .withStatus(200)
-                    .withBody(""))
-        );
-        stubFor(
-            delete(urlPathTemplate(ScrapperTgChatHttpClient.TG_CHAT_BY_ID_LINK))
-                .withPathParam("id", equalTo("1"))
-                .willReturn(aResponse()
-                    .withHeader("Content-Type", "application/json")
-                    .withStatus(200)
-                    .withBody(""))
-        );
-    }
-
-    public void setupStubServerError() {
-        stubFor(
-            post(urlPathTemplate(ScrapperTgChatHttpClient.TG_CHAT_BY_ID_LINK))
-                .withPathParam("id", equalTo("0"))
-                .willReturn(aResponse()
-                    .withStatus(404)
-                )
-        );
-        stubFor(
-            delete(urlPathTemplate(ScrapperTgChatHttpClient.TG_CHAT_BY_ID_LINK))
-                .withPathParam("id", equalTo("0"))
-                .willReturn(aResponse()
-                    .withStatus(404)
-                )
-        );
-    }
-
     @Test
     public void successRequestTest() {
         // Arrange
-        setupStubSuccess();
+        stubFor(
+            post(urlPathTemplate(ScrapperTgChatHttpClient.TG_CHAT_BY_ID_LINK))
+                .withPathParam("id", equalTo("1"))
+                .willReturn(aResponse()
+                    .withHeader("Content-Type", "application/json")
+                    .withStatus(200)
+                    .withBody(""))
+        );
+        stubFor(
+            delete(urlPathTemplate(ScrapperTgChatHttpClient.TG_CHAT_BY_ID_LINK))
+                .withPathParam("id", equalTo("1"))
+                .willReturn(aResponse()
+                    .withHeader("Content-Type", "application/json")
+                    .withStatus(200)
+                    .withBody(""))
+        );
 
         // Act, Assert
         assertDoesNotThrow(() -> client.addTgChat(1L));
@@ -65,7 +44,20 @@ public class ScrapperTgChatHttpClientTests {
     @Test
     public void badRequestTest() {
         // Arrange
-        setupStubServerError();
+        stubFor(
+            post(urlPathTemplate(ScrapperTgChatHttpClient.TG_CHAT_BY_ID_LINK))
+                .withPathParam("id", equalTo("0"))
+                .willReturn(aResponse()
+                    .withStatus(404)
+                )
+        );
+        stubFor(
+            delete(urlPathTemplate(ScrapperTgChatHttpClient.TG_CHAT_BY_ID_LINK))
+                .withPathParam("id", equalTo("0"))
+                .willReturn(aResponse()
+                    .withStatus(404)
+                )
+        );
 
         // Act, Assert
         assertThrows(WebClientResponseException.class, () -> client.addTgChat(0L));
