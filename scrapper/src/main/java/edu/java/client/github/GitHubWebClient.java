@@ -3,17 +3,20 @@ package edu.java.client.github;
 import edu.java.client.dto.GithubResponse;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.util.retry.Retry;
 
 public class GitHubWebClient implements GitHubClient {
     private static final String BASE_URL = "https://api.github.com";
     private final WebClient webClient;
+    private final Retry retry;
 
-    public GitHubWebClient() {
-        this(BASE_URL);
+    public GitHubWebClient(Retry retry) {
+        this(BASE_URL, retry);
     }
 
-    public GitHubWebClient(String url) {
+    public GitHubWebClient(String url, Retry retry) {
         this.webClient = WebClient.create(url);
+        this.retry = retry;
     }
 
     @Override
@@ -23,6 +26,7 @@ public class GitHubWebClient implements GitHubClient {
             .uri("/repos/{owner}/{repository}", owner, repository)
             .retrieve()
             .bodyToMono(GithubResponse.class)
+            .retryWhen(retry)
             .block();
     }
 }
