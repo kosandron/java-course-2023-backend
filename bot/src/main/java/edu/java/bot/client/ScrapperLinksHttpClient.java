@@ -6,19 +6,22 @@ import edu.java.bot.client.dto.ListLinksResponse;
 import edu.java.bot.client.dto.RemoveLinkRequest;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.util.retry.Retry;
 
 public class ScrapperLinksHttpClient {
     private static final String BASE_URL = "http://localhost:8080";
     public static final String LINKS_PATH = "/links";
     private static final String TG_CHAT_HEADER = "Tg-Chat-Id";
     private final WebClient webClient;
+    private final Retry retry;
 
-    public ScrapperLinksHttpClient() {
-        this(BASE_URL);
+    public ScrapperLinksHttpClient(Retry retry) {
+        this(BASE_URL, retry);
     }
 
-    public ScrapperLinksHttpClient(String baseUrl) {
+    public ScrapperLinksHttpClient(String baseUrl, Retry retry) {
         this.webClient = WebClient.create(baseUrl);
+        this.retry = retry;
     }
 
     public ListLinksResponse getLinks(Long tgChatId) {
@@ -28,6 +31,7 @@ public class ScrapperLinksHttpClient {
             .header(TG_CHAT_HEADER, tgChatId.toString())
             .retrieve()
             .bodyToMono(ListLinksResponse.class)
+            .retryWhen(retry)
             .block();
     }
 
@@ -39,6 +43,7 @@ public class ScrapperLinksHttpClient {
             .bodyValue(new AddLinkRequest((link)))
             .retrieve()
             .bodyToMono(LinkResponse.class)
+            .retryWhen(retry)
             .block();
     }
 
@@ -50,6 +55,7 @@ public class ScrapperLinksHttpClient {
             .bodyValue(new RemoveLinkRequest(link))
             .retrieve()
             .bodyToMono(LinkResponse.class)
+            .retryWhen(retry)
             .block();
     }
 }

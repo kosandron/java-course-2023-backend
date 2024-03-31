@@ -1,5 +1,14 @@
 app:
   telegram-token: unset
+  retry-specification:
+    back-off-type: fixed
+    max-attempts: 6
+    delay: 10000
+    jitter: 0.5
+    codes: 429, 500, 501, 502, 503, 504
+  rate-limiter:
+    is-working: true
+    limit-per-minute: 100
 
 spring:
   application:
