@@ -13,8 +13,6 @@ import java.time.OffsetDateTime;
 import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
-@Testcontainers
 public class JdbcLinkDaoTests extends IntegrationTest {
     private static final String LINK_PATH_STRING = "https://github.com/kosandron/java-course-2023-backend";
     private static final OffsetDateTime TIME = OffsetDateTime.now();
@@ -54,8 +52,8 @@ public class JdbcLinkDaoTests extends IntegrationTest {
 
         linkDao.deleteById(savedLink.getId());
 
-        var chats = linkDao.findAll();
-        assertThat(chats).doesNotContain(savedLink);
+        var links = linkDao.findAll();
+        assertThat(links).doesNotContain(savedLink);
     }
 
     @Test
@@ -66,8 +64,8 @@ public class JdbcLinkDaoTests extends IntegrationTest {
 
         linkDao.deleteById(id);
 
-        var chats = linkDao.findAll();
-        assertThat(chats).isEmpty();
+        var links = linkDao.findAll();
+        assertThat(links).isEmpty();
     }
 
     @Test

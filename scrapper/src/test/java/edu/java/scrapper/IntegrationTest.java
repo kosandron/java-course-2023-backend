@@ -9,6 +9,7 @@ import liquibase.database.jvm.JdbcConnection;
 import liquibase.exception.LiquibaseException;
 import liquibase.resource.DirectoryResourceAccessor;
 import lombok.SneakyThrows;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.JdbcDatabaseContainer;
@@ -22,6 +23,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 @Testcontainers
+@SpringBootTest
 public abstract class IntegrationTest {
     public static PostgreSQLContainer<?> POSTGRES;
 

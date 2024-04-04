@@ -12,8 +12,6 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
-@Testcontainers
 public class JdbcChatDaoTests extends IntegrationTest {
     @Autowired
     private ChatDao chatDao;
