@@ -8,7 +8,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class BotHttpClient {
     private static final String BASE_URL = "http://localhost:8090";
     public static final String UPDATE_PATH = "/updates";
-  
     private final WebClient webClient;
 
     public BotHttpClient() {
