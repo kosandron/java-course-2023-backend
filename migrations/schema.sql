@@ -8,9 +8,7 @@ create table Links(
     id BIGSERIAL PRIMARY KEY not null,
     url TEXT not null,
     last_check_time TIMESTAMP with time zone not null DEFAULT CURRENT_TIMESTAMP,
-    created_by TEXT not null ,
-    created_at TIMESTAMP with time zone not null DEFAULT CURRENT_TIMESTAMP,
-    last_modified_time TIMESTAMP with time zone not null
+    last_modified_time TIMESTAMP with time zone not null DEFAULT CURRENT_TIMESTAMP
 );
 
 create table chats_links (
