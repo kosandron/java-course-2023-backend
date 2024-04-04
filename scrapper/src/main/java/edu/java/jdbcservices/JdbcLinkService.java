@@ -1,13 +1,16 @@
 package edu.java.jdbcservices;
 
-import edu.java.domain.dao.ChatDao;
-import edu.java.domain.dao.LinkChatDao;
-import edu.java.domain.dao.LinkDao;
-import edu.java.domain.model.Link;
-import edu.java.domain.model.LinkChat;
-import edu.java.exception.ResourceNotFoundException;
+import edu.java.domain.jdbc.dao.ChatDao;
+import edu.java.domain.jdbc.dao.LinkChatDao;
+import edu.java.domain.jdbc.dao.LinkDao;
+import edu.java.domain.jdbc.model.Link;
+import edu.java.domain.jdbc.model.LinkChat;
+import edu.java.dto.database.LinkDto;
+import edu.java.exceptions.ResourceNotFoundException;
 import edu.java.services.LinkService;
+import java.time.Instant;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -21,13 +24,16 @@ public class JdbcLinkService implements LinkService {
     private final LinkChatDao linkChatDao;
 
     @Override
-    public Link add(long chatId, String url) {
+    public LinkDto add(long chatId, String url) {
         if (chatDao.findById(chatId).isEmpty()) {
-            throw new ResourceNotFoundException();
+            throw ResourceNotFoundException.chatNotFoundException(chatId);
         }
 
         Optional<Link> optionalLink = linkDao.findByUrl(url);
-        Link link = optionalLink.orElseGet(() -> linkDao.save(Link.builder().url(url).build()));
+        Link link = optionalLink.orElseGet(() -> linkDao.save(Link.builder().url(url)
+            .lastCheckTime(OffsetDateTime.ofInstant(Instant.EPOCH, ZoneOffset.UTC))
+            .lastModifiedTime(OffsetDateTime.now())
+            .build()));
 
         linkChatDao.save(
             LinkChat.builder()
@@ -36,40 +42,42 @@ public class JdbcLinkService implements LinkService {
                 .build()
         );
 
-        return link;
+        return LinkDto.fromJdbcLink(link);
     }
 
     @Override
-    public Link remove(long chatId, String url) {
+    public LinkDto remove(long chatId, String url) {
         Link link = linkDao.findByUrl(url)
-            .orElseThrow(() -> new ResourceNotFoundException());
+            .orElseThrow(ResourceNotFoundException::new);
         linkChatDao.deleteByIds(link.getId(), chatId);
 
         if (linkChatDao.findAllChatsByLinkId(link.getId()).isEmpty()) {
             linkDao.deleteById(link.getId());
         }
 
-        return link;
+        return LinkDto.fromJdbcLink(link);
     }
 
     @Override
-    public List<Link> listByOldestCheck(int count) {
+    public List<LinkDto> listByOldestCheck(int count) {
         return linkDao.findNLinksByOldestLastCheck(count)
             .stream()
+            .map(LinkDto::fromJdbcLink)
             .toList();
     }
 
     @Override
-    public List<Link> listAll() {
+    public List<LinkDto> listAll() {
         return linkDao.findAll()
             .stream()
+            .map(LinkDto::fromJdbcLink)
             .toList();
     }
 
     @Override
     public void updateLastModified(long linkId, OffsetDateTime offsetDateTime) {
         Link link = linkDao.findById(linkId)
-            .orElseThrow(() -> new ResourceNotFoundException());
+            .orElseThrow(ResourceNotFoundException::new);
 
         link.setLastModifiedTime(offsetDateTime);
         linkDao.updateLink(link);
@@ -78,7 +86,7 @@ public class JdbcLinkService implements LinkService {
     @Override
     public void updateLastChecked(long linkId, OffsetDateTime offsetDateTime) {
         Link link = linkDao.findById(linkId)
-            .orElseThrow(() -> new ResourceNotFoundException());
+            .orElseThrow(ResourceNotFoundException::new);
 
         link.setLastCheckTime(offsetDateTime);
         linkDao.updateLink(link);

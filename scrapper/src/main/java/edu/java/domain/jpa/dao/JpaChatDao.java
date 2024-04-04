@@ -1,6 +1,6 @@
-package edu.java.domain.dao;
+package edu.java.domain.jpa.dao;
 
-import edu.java.domain.models.Chat;
+import edu.java.domain.jpa.model.Chat;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -1,8 +1,8 @@
 package edu.java.jpaservices;
 
-import edu.java.domain.dao.JpaChatDao;
-import edu.java.domain.dao.JpaLinksDao;
-import edu.java.domain.models.Chat;
+import edu.java.domain.jpa.dao.JpaChatDao;
+import edu.java.domain.jpa.dao.JpaLinksDao;
+import edu.java.domain.jpa.model.Chat;
 import edu.java.exceptions.ChatAlreadyExistsException;
 import edu.java.exceptions.ResourceNotFoundException;
 import edu.java.services.ChatService;

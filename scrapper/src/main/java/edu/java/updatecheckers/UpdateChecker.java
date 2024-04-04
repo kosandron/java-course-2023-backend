@@ -1,9 +1,9 @@
 package edu.java.updatecheckers;
 
-import edu.java.domain.models.Link;
+import edu.java.dto.database.LinkDto;
 
 public interface UpdateChecker {
-    UpdateCheckResult check(Link link);
+    UpdateCheckResult check(LinkDto link);
 
     boolean supports(String linkUrl);
 }

@@ -1,9 +1,10 @@
 package edu.java.jpaservices;
 
-import edu.java.domain.dao.JpaChatDao;
-import edu.java.domain.dao.JpaLinksDao;
-import edu.java.domain.models.Chat;
-import edu.java.domain.models.Link;
+import edu.java.domain.jpa.dao.JpaChatDao;
+import edu.java.domain.jpa.dao.JpaLinksDao;
+import edu.java.domain.jpa.model.Chat;
+import edu.java.domain.jpa.model.Link;
+import edu.java.dto.database.LinkDto;
 import edu.java.exceptions.ResourceNotFoundException;
 import edu.java.services.LinkService;
 import java.time.Instant;
@@ -22,7 +23,7 @@ public class JpaLinkService implements LinkService {
     private final JpaLinksDao linkDao;
 
     @Override
-    public Link add(long chatId, String url) {
+    public LinkDto add(long chatId, String url) {
         Optional<Chat> chatOptional = chatDao.findById(chatId);
         if (chatOptional.isEmpty()) {
             throw ResourceNotFoundException.chatNotFoundException(chatId);
@@ -39,11 +40,11 @@ public class JpaLinkService implements LinkService {
 
         linkDao.insertLinkChat(link.getId(), chatId);
 
-        return link;
+        return LinkDto.fromJpaLink(link);
     }
 
     @Override
-    public Link remove(long chatId, String url) {
+    public LinkDto remove(long chatId, String url) {
         Optional<Chat> chatOptional = chatDao.findById(chatId);
         if (chatOptional.isEmpty()) {
             throw ResourceNotFoundException.chatNotFoundException(chatId);
@@ -59,17 +60,25 @@ public class JpaLinkService implements LinkService {
             linkDao.deleteById(linkId);
         }
 
-        return link;
+        return LinkDto.fromJpaLink(link);
     }
 
     @Override
-    public List<Link> listByOldestCheck(int count) {
-        return linkDao.findByOrderByLastCheckedAsc(Limit.of(count));
+    public List<LinkDto> listByOldestCheck(int count) {
+        return linkDao
+            .findByOrderByLastCheckedAsc(Limit.of(count))
+            .stream()
+            .map(LinkDto::fromJpaLink)
+            .toList();
     }
 
     @Override
-    public List<Link> listAll() {
-        return linkDao.findAll();
+    public List<LinkDto> listAll() {
+        return linkDao
+            .findAll()
+            .stream()
+            .map(LinkDto::fromJpaLink)
+            .toList();
     }
 
     @Override

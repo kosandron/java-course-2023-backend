@@ -1,12 +1,12 @@
 package edu.java.jdbcservices;
 
-import edu.java.domain.dao.ChatDao;
-import edu.java.domain.dao.LinkChatDao;
-import edu.java.domain.dao.LinkDao;
-import edu.java.domain.model.Chat;
-import edu.java.domain.model.Link;
-import edu.java.exception.ChatAlreadyExistsException;
-import edu.java.exception.ResourceNotFoundException;
+import edu.java.domain.jdbc.dao.ChatDao;
+import edu.java.domain.jdbc.dao.LinkChatDao;
+import edu.java.domain.jdbc.dao.LinkDao;
+import edu.java.domain.jdbc.model.Chat;
+import edu.java.domain.jdbc.model.Link;
+import edu.java.exceptions.ChatAlreadyExistsException;
+import edu.java.exceptions.ResourceNotFoundException;
 import edu.java.services.ChatService;
 import java.util.Collection;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ public class JdbcChatService implements ChatService {
     @Override
     public void unregister(long chatId) {
         if (chatDao.findById(chatId).isEmpty()) {
-            throw new ResourceNotFoundException();
+            throw ResourceNotFoundException.chatNotFoundException(chatId);
         }
 
         Collection<Link> links = linkChatDao.findAllLinksByChatId(chatId);

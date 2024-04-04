@@ -1,6 +1,6 @@
 package edu.java.updatecheckers;
 
-import edu.java.domain.models.Link;
+import edu.java.dto.database.LinkDto;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class MainChecker {
     private final List<UpdateChecker> updateCheckers;
 
-    public UpdateCheckResult check(Link link) {
+    public UpdateCheckResult check(LinkDto link) {
         for (UpdateChecker checker : updateCheckers) {
             UpdateCheckResult result = checker.check(link);
             if (result.hasUpdate()) {

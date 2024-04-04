@@ -1,11 +1,8 @@
-package edu.java.scrapper.jpa;
+package edu.java.scrapper.jdbc;
 
-import edu.java.domain.jpa.dao.JpaChatDao;
-import edu.java.domain.jpa.model.Chat;
+import edu.java.domain.jdbc.dao.ChatDao;
+import edu.java.domain.jdbc.model.Chat;
 import edu.java.exceptions.ChatAlreadyExistsException;
-import edu.java.jpaservices.JpaChatService;
-import edu.java.jpaservices.JpaLinkChatService;
-import edu.java.jpaservices.JpaLinkService;
 import edu.java.scrapper.IntegrationTest;
 import edu.java.services.ChatService;
 import edu.java.services.LinkChatService;
@@ -15,14 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
-import org.testcontainers.junit.jupiter.Testcontainers;
-import java.util.ArrayList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@SpringBootTest(properties = "app.database-access-type=jpa")
-public class JpaChatServiceTests extends IntegrationTest {
-    @Autowired private JpaChatDao chatRepository;
+@SpringBootTest(properties = "app.database-access-type=jdbc")
+public class JdbcChatServiceTests extends IntegrationTest {
+    @Autowired private ChatDao chatRepository;
     @Autowired private ChatService chatService;
     @Autowired private LinkService linkService;
     @Autowired private LinkChatService linkChatService;
@@ -39,7 +34,7 @@ public class JpaChatServiceTests extends IntegrationTest {
         var chats = chatRepository.findAll();
 
         // Assert
-        assertThat(chats).anyMatch(chat -> chat.getId().equals(chatId));
+        assertThat(chats).anyMatch(chat -> chat.getChatId().equals(chatId));
     }
 
     @Test
@@ -66,7 +61,7 @@ public class JpaChatServiceTests extends IntegrationTest {
         chatService.unregister(chatId);
 
         // Assert
-        assertThat(chatRepository.findAll()).doesNotContain(new Chat(chatId, new ArrayList<>()));
+        assertThat(chatRepository.findAll()).doesNotContain(new Chat(chatId));
     }
 
     @Test

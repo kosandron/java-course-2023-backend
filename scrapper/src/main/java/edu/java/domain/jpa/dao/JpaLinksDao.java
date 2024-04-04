@@ -1,6 +1,6 @@
-package edu.java.domain.dao;
+package edu.java.domain.jpa.dao;
 
-import edu.java.domain.models.Link;
+import edu.java.domain.jpa.model.Link;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Limit;

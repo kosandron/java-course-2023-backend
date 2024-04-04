@@ -1,26 +1,28 @@
-package edu.java.scrapper.jpa;
+package edu.java.scrapper.jdbc;
 
-import edu.java.domain.jpa.dao.JpaLinksDao;
-import edu.java.domain.jpa.model.Link;
+import edu.java.domain.jdbc.dao.LinkChatDao;
+import edu.java.domain.jdbc.dao.LinkDao;
+import edu.java.domain.jdbc.model.Link;
 import edu.java.exceptions.ResourceNotFoundException;
 import edu.java.scrapper.IntegrationTest;
 import edu.java.services.ChatService;
 import edu.java.services.LinkService;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@SpringBootTest(properties = "app.database-access-type=jpa")
-public class JpaLinkServiceTests extends IntegrationTest {
+@SpringBootTest(properties = "app.database-access-type=jdbc")
+public class JdbcLinkServiceTests extends IntegrationTest {
     private static final String URL = "https://github.com/kosandron/java-course-2023-backend";
 
-    @Autowired private JpaLinksDao linkRepository;
+    @Autowired private LinkDao linkRepository;
+    @Autowired private LinkChatDao linkChatRepository;
     @Autowired private ChatService chatService;
     @Autowired private LinkService linkService;
 
@@ -51,7 +53,7 @@ public class JpaLinkServiceTests extends IntegrationTest {
 
         // Assert
         assertThat(linkRepository.findByUrl(URL)).isPresent();
-        assertThat(linkRepository.findAllByChatsId(chatId)).hasSize(1);
+        assertThat(linkChatRepository.findAllLinksByChatId(chatId)).hasSize(1);
     }
 
     @Test
@@ -72,9 +74,9 @@ public class JpaLinkServiceTests extends IntegrationTest {
         linkService.add(chatId3, URL);
 
         // Assert
-        assertThat(linkRepository.findAllByChatsId(chatId1)).hasSize(1);
-        assertThat(linkRepository.findAllByChatsId(chatId2)).hasSize(1);
-        assertThat(linkRepository.findAllByChatsId(chatId3)).hasSize(1);
+        assertThat(linkChatRepository.findAllLinksByChatId(chatId1)).hasSize(1);
+        assertThat(linkChatRepository.findAllLinksByChatId(chatId2)).hasSize(1);
+        assertThat(linkChatRepository.findAllLinksByChatId(chatId3)).hasSize(1);
         assertThat(linkRepository.findByUrl(URL)).isPresent();
     }
 
@@ -128,12 +130,10 @@ public class JpaLinkServiceTests extends IntegrationTest {
         linkService.remove(chatId2, URL);
 
         // Assert
-        assertThat(linkRepository.findAllByChatsId(chatId1)).isEmpty();
-        assertThat(linkRepository.findAllByChatsId(chatId2)).isEmpty();
+        assertThat(linkChatRepository.findAllLinksByChatId(chatId1)).isEmpty();
+        assertThat(linkChatRepository.findAllLinksByChatId(chatId2)).isEmpty();
         assertThat(linkRepository.findAll()).isEmpty();
     }
-
-
 
     @Test
     @Transactional
@@ -153,7 +153,7 @@ public class JpaLinkServiceTests extends IntegrationTest {
         // Assert
         Link updatedLink = linkRepository.findById(link.getId()).get();
         assertThat(updatedLink).isNotNull();
-        assertThat(updatedLink.getLastChecked()).isEqualTo(newTime);
-        assertThat(updatedLink.getLastModified()).isEqualTo(newTime);
+        assertThat(updatedLink.getLastCheckTime()).isEqualTo(newTime);
+        assertThat(updatedLink.getLastModifiedTime()).isEqualTo(newTime);
     }
 }

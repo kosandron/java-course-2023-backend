@@ -1,7 +1,7 @@
-package edu.java.domain.dao;
+package edu.java.domain.jdbc.dao;
 
-import edu.java.domain.model.Chat;
-import edu.java.exception.ChatAlreadyExistsException;
+import edu.java.domain.jdbc.model.Chat;
+import edu.java.exceptions.ChatAlreadyExistsException;
 import java.util.Collection;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;

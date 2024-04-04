@@ -1,8 +1,9 @@
 package edu.java.updatecheckers;
 
-import edu.java.client.dto.StackOverFlowResponse;
+import edu.java.client.dto.StackOverflowItem;
+import edu.java.client.dto.StackOverflowResponse;
 import edu.java.client.stackoverflow.StackOverflowClient;
-import edu.java.domain.models.Link;
+import edu.java.dto.database.LinkDto;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -16,18 +17,19 @@ public class StackOverflowUpdateChecker implements UpdateChecker {
     private static final String STACKOVERFLOW_DOMAIN = "stackoverflow.com";
 
     @Override
-    public UpdateCheckResult check(Link link) {
+    public UpdateCheckResult check(LinkDto link) {
         if (supports(link.getUrl())) {
             List<String> extensions = PathParser.getPathComponents(link.getUrl());
             if (extensions.size() < MIN_WORDS_COUNT) {
                 return UpdateCheckResult.getDefault();
             }
 
-            StackOverFlowResponse response = stackOverflowClient.fetchQuestion(Long.valueOf(extensions.get(
+            StackOverflowResponse response = stackOverflowClient.fetchQuestion(Long.valueOf(extensions.get(
                 QUESTION_ID_POSITION)));
-            if (link.getLastModified().isBefore(response.lastModified())) {
-                link.setLastModified(response.lastModified());
-                return new UpdateCheckResult(true, response.title());
+            StackOverflowItem responseItem = response.items()[0];
+            if (link.getLastModified().isBefore(responseItem.lastModified())) {
+                link.setLastModified(responseItem.lastModified());
+                return new UpdateCheckResult(true, responseItem.title());
             }
         }
 

@@ -1,9 +1,9 @@
 package edu.java.jpaservices;
 
-import edu.java.domain.dao.JpaChatDao;
-import edu.java.domain.dao.JpaLinksDao;
-import edu.java.domain.models.Chat;
-import edu.java.domain.models.Link;
+import edu.java.domain.jpa.dao.JpaChatDao;
+import edu.java.domain.jpa.dao.JpaLinksDao;
+import edu.java.dto.database.ChatDto;
+import edu.java.dto.database.LinkDto;
 import edu.java.services.LinkChatService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -16,12 +16,20 @@ public class JpaLinkChatService implements LinkChatService {
     private final JpaLinksDao linkDao;
 
     @Override
-    public List<Link> listAllLinksByChatId(long chatId) {
-        return linkDao.findAllByChatsId(chatId);
+    public List<LinkDto> listAllLinksByChatId(long chatId) {
+        return linkDao
+            .findAllByChatsId(chatId)
+            .stream()
+            .map(LinkDto::fromJpaLink)
+            .toList();
     }
 
     @Override
-    public List<Chat> listAllChatsByLinkId(long linkId) {
-        return chatDao.findAllByLinksId(linkId);
+    public List<ChatDto> listAllChatsByLinkId(long linkId) {
+        return chatDao
+            .findAllByLinksId(linkId)
+            .stream()
+            .map(ChatDto::fromJpaChat)
+            .toList();
     }
 }

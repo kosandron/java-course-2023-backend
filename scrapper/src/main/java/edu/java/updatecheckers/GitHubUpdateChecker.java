@@ -2,7 +2,7 @@ package edu.java.updatecheckers;
 
 import edu.java.client.dto.GithubResponse;
 import edu.java.client.github.GitHubClient;
-import edu.java.domain.models.Link;
+import edu.java.dto.database.LinkDto;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -17,7 +17,7 @@ public class GitHubUpdateChecker implements UpdateChecker {
     private final GitHubClient gitHubClient;
 
     @Override
-    public UpdateCheckResult check(Link link) {
+    public UpdateCheckResult check(LinkDto link) {
         if (supports(link.getUrl())) {
             List<String> extensions = PathParser.getPathComponents(link.getUrl());
             if (extensions.size() < MIN_WORDS_COUNT) {
