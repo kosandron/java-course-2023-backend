@@ -1,6 +1,6 @@
 package edu.java.client.stackoverflow;
 
-import edu.java.client.dto.StackOverFlowResponse;
+import edu.java.client.dto.StackOverflowResponse;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -17,12 +17,12 @@ public class StackOverflowWebClient implements StackOverflowClient {
     }
 
     @Override
-    public StackOverFlowResponse fetchQuestion(@NotNull Long questionId) {
+    public StackOverflowResponse fetchQuestion(@NotNull Long questionId) {
         return this.webClient
             .get()
             .uri("/questions/{questionId}", questionId)
             .retrieve()
-            .bodyToMono(StackOverFlowResponse.class)
+            .bodyToMono(StackOverflowResponse.class)
             .block();
     }
 }

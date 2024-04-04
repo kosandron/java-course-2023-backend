@@ -1,16 +1,5 @@
 package edu.java.sheduler;
 
-import edu.java.client.BotHttpClient;
-import edu.java.domain.models.Link;
-import edu.java.services.LinkChatService;
-import edu.java.services.LinkService;
-import edu.java.services.LinkUpdater;
-import edu.java.updatecheckers.MainChecker;
-import edu.java.updatecheckers.UpdateCheckResult;
-import java.net.URI;
-import java.time.OffsetDateTime;
-import java.util.List;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
