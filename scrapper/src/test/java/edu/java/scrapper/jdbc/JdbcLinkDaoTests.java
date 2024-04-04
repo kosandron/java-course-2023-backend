@@ -13,6 +13,7 @@ import java.time.OffsetDateTime;
 import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SpringBootTest(properties = "app.database-access-type=jdbc")
 public class JdbcLinkDaoTests extends IntegrationTest {
     private static final String LINK_PATH_STRING = "https://github.com/kosandron/java-course-2023-backend";
     private static final OffsetDateTime TIME = OffsetDateTime.now();
