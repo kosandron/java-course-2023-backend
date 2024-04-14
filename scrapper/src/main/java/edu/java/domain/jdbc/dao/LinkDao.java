@@ -1,6 +1,6 @@
-package edu.java.domain.dao;
+package edu.java.domain.jdbc.dao;
 
-import edu.java.domain.model.Link;
+import edu.java.domain.jdbc.model.Link;
 import java.util.Collection;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ public class LinkDao {
 
     public void updateLink(Link link) {
         jdbcTemplate.update(
-            "UPDATE links SET last_modified = ?, last_checked = ? WHERE id = ?",
+            "UPDATE links SET last_modified_time = ?, last_check_time = ? WHERE id = ?",
             link.getLastModifiedTime(), link.getLastCheckTime(), link.getId()
         );
     }

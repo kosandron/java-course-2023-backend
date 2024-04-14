@@ -1,6 +1,7 @@
-package edu.java.jdbcservices;
+package edu.java.jpaservices;
 
-import edu.java.domain.jdbc.dao.LinkChatDao;
+import edu.java.domain.jpa.dao.JpaChatDao;
+import edu.java.domain.jpa.dao.JpaLinksDao;
 import edu.java.dto.database.ChatDto;
 import edu.java.dto.database.LinkDto;
 import edu.java.services.LinkChatService;
@@ -10,22 +11,25 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @RequiredArgsConstructor
-public class JdbcLinkChatService implements LinkChatService {
-    private final LinkChatDao linkChatDao;
+public class JpaLinkChatService implements LinkChatService {
+    private final JpaChatDao chatDao;
+    private final JpaLinksDao linkDao;
 
     @Override
     public List<LinkDto> listAllLinksByChatId(long chatId) {
-        return linkChatDao.findAllLinksByChatId(chatId)
+        return linkDao
+            .findAllByChatsId(chatId)
             .stream()
-            .map(LinkDto::fromJdbcLink)
+            .map(LinkDto::fromJpaLink)
             .toList();
     }
 
     @Override
     public List<ChatDto> listAllChatsByLinkId(long linkId) {
-        return linkChatDao.findAllChatsByLinkId(linkId)
+        return chatDao
+            .findAllByLinksId(linkId)
             .stream()
-            .map(ChatDto::fromJdbcChat)
+            .map(ChatDto::fromJpaChat)
             .toList();
     }
 }

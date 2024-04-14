@@ -1,11 +1,11 @@
 package edu.java.services;
 
-import edu.java.domain.model.Chat;
-import edu.java.domain.model.Link;
+import edu.java.dto.database.ChatDto;
+import edu.java.dto.database.LinkDto;
 import java.util.List;
 
 public interface LinkChatService {
-    List<Link> listAllLinksByChatId(long tgChatId);
+    List<LinkDto> listAllLinksByChatId(long chatId);
 
-    List<Chat> listAllChatsByLinkId(long linkId);
+    List<ChatDto> listAllChatsByLinkId(long linkId);
 }

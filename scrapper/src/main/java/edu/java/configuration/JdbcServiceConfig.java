@@ -1,8 +1,8 @@
 package edu.java.configuration;
 
-import edu.java.domain.dao.ChatDao;
-import edu.java.domain.dao.LinkChatDao;
-import edu.java.domain.dao.LinkDao;
+import edu.java.domain.jdbc.dao.ChatDao;
+import edu.java.domain.jdbc.dao.LinkChatDao;
+import edu.java.domain.jdbc.dao.LinkDao;
 import edu.java.jdbcservices.JdbcChatService;
 import edu.java.jdbcservices.JdbcLinkChatService;
 import edu.java.jdbcservices.JdbcLinkService;

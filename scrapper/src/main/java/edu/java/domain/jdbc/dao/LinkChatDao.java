@@ -1,8 +1,8 @@
-package edu.java.domain.dao;
+package edu.java.domain.jdbc.dao;
 
-import edu.java.domain.model.Chat;
-import edu.java.domain.model.Link;
-import edu.java.domain.model.LinkChat;
+import edu.java.domain.jdbc.model.Chat;
+import edu.java.domain.jdbc.model.Link;
+import edu.java.domain.jdbc.model.LinkChat;
 import java.util.Collection;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -35,16 +35,9 @@ public class LinkChatDao {
         );
     }
 
-    public int deleteAllByLinkId(long linkId) {
-        return jdbcTemplate.update(
-            "DELETE FROM chats_links WHERE linkId = ?",
-            linkId
-        );
-    }
-
     public Collection<Link> findAllLinksByChatId(Long chatId) {
         return jdbcTemplate.query(
-            "SELECT * FROM chats_links WHERE link_id IN (SELECT link_id FROM link_chat WHERE chat_id = ?)",
+            "SELECT * FROM links WHERE id IN (SELECT link_id FROM chats_links WHERE chat_id = ?)",
             (rs, rowNum) -> Link.parseResultSet(rs),
             chatId
         );
@@ -52,7 +45,7 @@ public class LinkChatDao {
 
     public Collection<Chat> findAllChatsByLinkId(Long linkId) {
         return jdbcTemplate.query(
-            "SELECT chat_id FROM chats_links WHERE link_id = ?",
+            "SELECT * FROM chats WHERE id IN (SELECT chat_id FROM chats_links WHERE link_id = ?)",
             (rs, rowNum) -> Chat.parseResultSet(rs),
             linkId
         );
